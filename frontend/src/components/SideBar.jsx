@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
+import { useNotes } from '../context/NotesContext'
+import DirectoryTree from './DirectoryTree'
 import {
   Home,
   FileText,
@@ -11,16 +13,22 @@ import {
   Settings,
   ChevronDown,
   ChevronRight,
+  Plus,
 } from 'lucide-react'
 
 const navItems = [
+  { name: 'Home', path: '/', icon: Home },
+  { name: 'Notes', path: '/Notes', icon:FileText},
+  { name: 'Home', path: '/', icon: Home },
   { name: 'Home', path: '/', icon: Home },
 ]
 
 function SideBar() {
   const location = useLocation()
   const { colors } = useTheme()
+  const { directories, selectedItem, setSelectedItem, addSubdirectory, addNote } = useNotes()
   const [openSections, setOpenSections] = useState({})
+  const isNotesActive = location.pathname === '/Notes'
 
   const toggleSection = (name) => {
     setOpenSections((prev) => ({ ...prev, [name]: !prev[name] }))
@@ -108,6 +116,27 @@ function SideBar() {
                       {child.name}
                     </Link>
                   ))}
+                </div>
+              )}
+
+              {item.name === 'Notes' && isNotesActive && (
+                <div className="ml-2 mt-2 mb-2">
+                  <div className="flex items-center justify-between mb-2 px-2">
+                    <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Files</span>
+                    <button
+                      onClick={() => addSubdirectory(null)}
+                      className="text-gray-400 hover:text-white transition-colors cursor-pointer"
+                    >
+                      <Plus size={14} />
+                    </button>
+                  </div>
+                  <DirectoryTree
+                    data={directories}
+                    selectedId={selectedItem?.id}
+                    onSelect={setSelectedItem}
+                    onAddSubdirectory={addSubdirectory}
+                    onAddNote={addNote}
+                  />
                 </div>
               )}
             </div>

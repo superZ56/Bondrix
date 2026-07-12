@@ -35,6 +35,41 @@ export const themes = {
     third: "#334155",
     textColor: "#F8FAFC",
   },
+
+  crimson: {
+    name: "Crimson",
+    primary: "#DC2626",
+    secondary: "#991B1B",
+    third: "#FEE2E2",
+  },
+
+  arctic: {
+    name: "Arctic",
+    primary: "#06B6D4",
+    secondary: "#0E7490",
+    third: "#CFFAFE",
+  },
+
+  lavender: {
+    name: "Lavender",
+    primary: "#A855F7",
+    secondary: "#6D28D9",
+    third: "#F3E8FF",
+  },
+
+  golden: {
+    name: "Golden",
+    primary: "#EAB308",
+    secondary: "#A16207",
+    third: "#FEF9C3",
+  },
+
+  graphite: {
+    name: "Graphite",
+    primary: "#475569",
+    secondary: "#1E293B",
+    third: "#E2E8F0",
+  },
 }
 
-export const defaultTheme ="rose"
+export const defaultTheme = "midnight"

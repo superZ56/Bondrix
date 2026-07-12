@@ -1,1 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lato:wght@400;700&family=Poppins:wght@400;700&family=Nunito:wght@400;700&family=Raleway:wght@400;700&family=Montserrat:wght@400;700&family=Open+Sans:wght@400;700&family=Oswald:wght@400;700&family=Source+Sans+3:wght@400;700&family=Quicksand:wght@400;700&family=Playfair+Display:wght@400;700&family=Merriweather:wght@400;700&family=Ubuntu:wght@400;700&family=Fira+Code:wght@400;700&family=Pacifico&family=Caveat:wght@400;700&family=Dancing+Script:wght@400;700&family=Indie+Flower&family=Lobster&family=Luckiest+Guy&family=Satisfy&family=Great+Vibes&family=Abril+Fatface&family=Bebas+Neue&family=Righteous&family=Fredoka+One&family=Comfortaa:wght@400;700&family=Josefin+Sans:wght@400;700&family=Barlow:wght@400;700&family=Rubik:wght@400;700&family=Work+Sans:wght@400;700&family=Manrope:wght@400;700&family=Outfit:wght@400;700&family=Space+Grotesk:wght@400;700&family=Sora:wght@400;700&family=DM+Sans:wght@400;700&family=Inter:wght@400;700&family=Lexend:wght@400;700&family=Red+Hat+Display:wght@400;700&family=Archivo:wght@400;700&family=IBM+Plex+Sans:wght@400;700&family=Noto+Sans:wght@400;700&family=Pt+Sans:wght@400;700&family=Libre+Franklin:wght@400;700&family=Cabin:wght@400;700&family=Exo+2:wght@400;700&family=Titillium+Web:wght@400;700&family=Pathway+Extreme:wght@400;700&family=Urbanist:wght@400;700&family=General+Sans:wght@400;700&display=swap');
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+.ProseMirror {
+  outline: none;
+  min-height: 400px;
+}
+
+.ProseMirror h1 { font-size: 2em; font-weight: 700; margin-bottom: 0.5em; }
+.ProseMirror h2 { font-size: 1.5em; font-weight: 600; margin-bottom: 0.4em; }
+.ProseMirror h3 { font-size: 1.25em; font-weight: 600; margin-bottom: 0.3em; }
+
+.ProseMirror p { margin-bottom: 0.75em; }
+
+.ProseMirror ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 0.75em; }
+.ProseMirror ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 0.75em; }
+
+.ProseMirror blockquote {
+  border-left: 3px solid #d1d5db;
+  padding-left: 1em;
+  margin-left: 0;
+  color: #6b7280;
+}
+
+.ProseMirror pre {
+  background: #f3f4f6;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-family: monospace;
+  margin-bottom: 0.75em;
+}
+
+.ProseMirror code {
+  background: #f3f4f6;
+  border-radius: 0.25rem;
+  padding: 0.15em 0.3em;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.ProseMirror hr {
+  border: none;
+  border-top: 1px solid #d1d5db;
+  margin: 1.5em 0;
+}
+
+.ProseMirror ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0;
+}
+
+.ProseMirror ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.ProseMirror ul[data-type="taskList"] li input[type="checkbox"] {
+  margin-top: 0.25rem;
+}
+
+.ProseMirror mark {
+  border-radius: 0.2em;
+  padding: 0.1em 0;
+}
+
+/* --- Tableaux --- */
+
+.ProseMirror table {
+  border-collapse: collapse;
+  margin: 1em 0;
+  width: 100%;
+  table-layout: fixed;
+  overflow: hidden;
+}
+
+.ProseMirror th,
+.ProseMirror td {
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 0.75rem;
+  vertical-align: top;
+  position: relative;
+  min-width: 80px;
+}
+
+.ProseMirror th {
+  background: #f9fafb;
+  font-weight: 600;
+  text-align: left;
+}
+
+.ProseMirror .selectedCell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(59, 130, 246, 0.1);
+  pointer-events: none;
+}
+
+.ProseMirror .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #3b82f6;
+  cursor: col-resize;
+}
+
+/* --- Callouts --- */
+
+.ProseMirror .callout {
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin: 0.75em 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.ProseMirror .callout p {
+  margin: 0;
+}
+
+.ProseMirror .callout-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  outline: none;
+  min-width: 1.5em;
+  text-align: center;
+  user-select: none;
+  border-radius: 0.25rem;
+  transition: background-color 0.15s;
+}
+
+.ProseMirror .callout-icon:hover {
+  background-color: rgba(0, 0, 0, 0.08);
+}
+
+.ProseMirror .callout-icon:focus {
+  background-color: rgba(0, 0, 0, 0.12);
+}
+
+[data-callout] .tiptap.is-empty::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  height: 0;
+}
+
+.ProseMirror .resize-cursor {
+  cursor: col-resize;
+}

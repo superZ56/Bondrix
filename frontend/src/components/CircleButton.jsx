@@ -1,8 +1,10 @@
 import { Settings } from "lucide-react"
 import { useTheme } from '../context/ThemeContext'
 
+// Settings Boutton
+
 export const SettingsIcon = ({ onClick }) => {
-  const { colors } = useTheme()
+  const { colors } = useTheme() 
 
   return (
     <button
