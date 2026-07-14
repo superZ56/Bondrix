@@ -8,6 +8,7 @@ const user = {
   avatar: null,
 }
 
+// Barre du haut affichant le nom de l'organisation et les boutons utilisateur (avatar, paramètres).
 function TopBar({onSettingsClick}) {
   const { colors } = useTheme()
 

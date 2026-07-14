@@ -1,8 +1,7 @@
 import { Settings } from "lucide-react"
 import { useTheme } from '../context/ThemeContext'
 
-// Settings Boutton
-
+// Bouton circulaire avec icône d'engrenage pour ouvrir les paramètres.
 export const SettingsIcon = ({ onClick }) => {
   const { colors } = useTheme() 
 
@@ -17,6 +16,7 @@ export const SettingsIcon = ({ onClick }) => {
   )
 }
 
+// Bouton circulaire affichant l'avatar utilisateur ou un placeholder.
 export const AvatarIcon = ({ src, alt, onClick }) => {
   const { colors } = useTheme()
 
@@ -38,6 +38,7 @@ export const AvatarIcon = ({ src, alt, onClick }) => {
   )
 }
 
+// Bouton circulaire affichant une lettre (initiale de l'utilisateur).
 export const CircleText = ({ text, onClick }) => {
   const { colors } = useTheme()
 

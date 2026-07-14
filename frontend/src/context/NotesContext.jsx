@@ -22,10 +22,12 @@ const initialDirectories = [
 
 let nextId = 10
 
+// Provider pour la gestion des notes et de l'arborescence de dossiers.
 export function NotesProvider({ children }) {
   const [directories, setDirectories] = useState(initialDirectories)
   const [selectedItem, setSelectedItem] = useState(null)
 
+  // Ajoute un sous-dossier dans le dossier parent spécifié (ou à la racine si null).
   const addSubdirectory = (parentId) => {
     const name = prompt('Directory name:')
     if (!name) return
@@ -43,6 +45,7 @@ export function NotesProvider({ children }) {
     setDirectories(addRecursive(directories))
   }
 
+  // Ajoute une note dans le dossier parent spécifié (ou à la racine si null).
   const addNote = (parentId) => {
     const name = prompt('Note name:')
     if (!name) return
@@ -60,6 +63,7 @@ export function NotesProvider({ children }) {
     setDirectories(addRecursive(directories))
   }
 
+  // Met à jour le contenu ou les propriétés d'une note existante dans l'arborescence.
   const updateNote = (updatedNote) => {
     const updateRecursive = (items) =>
       items.map((item) => {
@@ -77,4 +81,5 @@ export function NotesProvider({ children }) {
   )
 }
 
+// Hook personnalisé pour accéder au contexte des notes (directories, selectedItem, opérations CRUD).
 export const useNotes = () => useContext(NotesContext)

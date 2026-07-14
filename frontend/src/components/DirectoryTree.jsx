@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ChevronRight, ChevronDown, Folder, FileText, FolderPlus, FilePlus } from 'lucide-react'
 
+// Noeud récursif d'un dossier ou fichier dans l'arborescence des notes.
 function DirectoryNode({ node, level, selectedId, onSelect, onAddSubdirectory, onAddNote }) {
   const [isOpen, setIsOpen] = useState(false)
   const hasChildren = node.children && node.children.length > 0
@@ -74,6 +75,7 @@ function DirectoryNode({ node, level, selectedId, onSelect, onAddSubdirectory, o
   )
 }
 
+// Arborescence complète des dossiers et notes, rend chaque noeud racine récursivement.
 export default function DirectoryTree({ data, selectedId, onSelect, onAddSubdirectory, onAddNote }) {
   return (
     <div className="group">

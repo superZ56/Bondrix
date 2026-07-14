@@ -1,6 +1,7 @@
 import { useTheme } from '../context/ThemeContext'
 import { themes } from '../assets/Colors'
 
+// Page de paramètres affichée en overlay, permet de changer le thème de l'application.
 function Settings({ onClose }) {
 
   const { themeName, setThemeName, colors } = useTheme()
@@ -30,6 +31,7 @@ function Settings({ onClose }) {
   )
 }
 
+// Section de sélection du thème avec grille de couleurs disponibles.
 function ThemeSettings() {
   const { themeName, setThemeName } = useTheme()
 

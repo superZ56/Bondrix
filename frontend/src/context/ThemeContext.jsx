@@ -3,6 +3,7 @@ import { themes, defaultTheme } from '../assets/Colors'
 
 const ThemeContext = createContext()
 
+// Provider du thème global. Gère le thème sélectionné et applique les couleurs en CSS variables.
 export function ThemeProvider({ children }) {
   const [themeName, setThemeName] = useState(defaultTheme)
   const colors = themes[themeName]
@@ -27,6 +28,7 @@ export function ThemeProvider({ children }) {
   )
 }
 
+// Hook personnalisé pour accéder au thème courant (nom, couleurs, setter).
 export function useTheme() {
   return useContext(ThemeContext)
 }

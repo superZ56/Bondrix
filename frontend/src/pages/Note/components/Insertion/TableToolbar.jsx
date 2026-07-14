@@ -24,6 +24,7 @@ export default function TableToolbar({ editor }) {
   useEffect(() => {
     if (!editor) return
 
+    // Vérifie si le curseur est dans un tableau pour afficher ou masquer la barre d'outils.
     const checkTable = () => {
       setVisible(editor.isActive('table'))
     }

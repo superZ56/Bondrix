@@ -2,9 +2,11 @@ import { BrowserRouter ,  Routes , Route } from "react-router-dom"
 import Layout from "./components/Layout"
 import Home from "./pages/Home"
 import Notes from "./pages/Note/Notes"
+import Calendar from "./pages/Calendar/Calendar"
 import { ThemeProvider } from "./context/ThemeContext"
 import { NotesProvider } from "./context/NotesContext"
 
+// Composant racine de l'application. Définit les routes et englobe les providers globaux.
 function App() {
 
   return (
@@ -16,6 +18,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<Home />}></Route>
           <Route path="/Notes" element={<Notes />}></Route>
+          <Route path="/Calendar" element={<Calendar />}></Route>
         </Route>
       </Routes>
       </NotesProvider>

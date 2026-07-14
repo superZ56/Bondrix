@@ -6,6 +6,7 @@
 import { NodeViewWrapper, NodeViewContent } from '@tiptap/react'
 import { useTheme } from '../../../context/ThemeContext'
 
+// Nœud callout personnalisé avec icône cliquable et zone de texte éditable.
 export default function CalloutNode({ node, updateAttributes }) {
   const { colors } = useTheme()
 

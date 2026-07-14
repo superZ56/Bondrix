@@ -72,4 +72,4 @@ export const themes = {
   },
 }
 
-export const defaultTheme = "midnight"
+export const defaultTheme = "graphite"

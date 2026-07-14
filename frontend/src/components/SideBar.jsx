@@ -19,10 +19,11 @@ import {
 const navItems = [
   { name: 'Home', path: '/', icon: Home },
   { name: 'Notes', path: '/Notes', icon:FileText},
-  { name: 'Home', path: '/', icon: Home },
-  { name: 'Home', path: '/', icon: Home },
+  { name: 'Calendar', path: '/Calendar', icon: Calendar },
+  
 ]
 
+// Barre latérale de navigation avec les liens vers les pages et l'arborescence des notes.
 function SideBar() {
   const location = useLocation()
   const { colors } = useTheme()
@@ -30,6 +31,7 @@ function SideBar() {
   const [openSections, setOpenSections] = useState({})
   const isNotesActive = location.pathname === '/Notes'
 
+  // Ouvre ou ferme une section dépliable de la navigation (ex: sous-menu Notes).
   const toggleSection = (name) => {
     setOpenSections((prev) => ({ ...prev, [name]: !prev[name] }))
   }

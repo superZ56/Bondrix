@@ -5,6 +5,7 @@ import Settings from '../pages/Settings'
 import { useTheme } from '../context/ThemeContext'
 import { useState } from 'react'
 
+// Mise en page principale avec SideBar, TopBar, zone de contenu et overlay Settings.
 function Layout() {
   const { colors } = useTheme()
   const [showSettings , setShowSettings] = useState(false)
