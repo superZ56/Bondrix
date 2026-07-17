@@ -55,7 +55,7 @@ export default function NoteEditor({ note, onUpdate }) {
     // Sauvegarde le contenu à chaque modification.
     onUpdate: ({ editor }) => {
       if (onUpdate && note) {
-        onUpdate({ ...note, content: editor.getJSON() })
+        onUpdate({ ...note, content: editor.getHTML() })
       }
     },
   })
@@ -63,10 +63,10 @@ export default function NoteEditor({ note, onUpdate }) {
   // Quand on change de note, met à jour le contenu de l'éditeur.
   useEffect(() => {
     if (editor && note) {
-      const currentJSON = JSON.stringify(editor.getJSON())
-      const newJSON = JSON.stringify(note.content)
-      if (currentJSON !== newJSON) {
-        editor.commands.setContent(note.content || '')
+      const currentContent = editor.getHTML()
+      const newContent = note.content || ''
+      if (currentContent !== newContent) {
+        editor.commands.setContent(newContent)
       }
     }
   }, [note?.id])

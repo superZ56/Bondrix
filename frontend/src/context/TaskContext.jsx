@@ -1,24 +1,69 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
+import * as taskService from '../services/taskService'
+import { useAuth } from './AuthContext'
 
 const TaskContext = createContext()
 
-// Provider pour la gestion des tâches quotidiennes (ajout, suppression, cochage).
 export function TaskProvider({ children }) {
+  const { user } = useAuth()
   const [tasks, setTasks] = useState([])
 
-  // Ajoute une nouvelle tâche avec un ID unique et l'état coché par défaut.
-  const addTask = (task) => {
-    setTasks((prev) => [...prev, { ...task, id: crypto.randomUUID(), done: false }])
+  useEffect(() => {
+    if (!user) return
+    const load = async () => {
+      try {
+        const data = await taskService.getTasks()
+        setTasks(data.map((t) => ({
+          id: t._id,
+          title: t.title,
+          date: t.date,
+          done: t.status,
+          importance: t.importance,
+        })))
+      } catch (err) {
+        console.error('Erreur chargement tâches:', err)
+      }
+    }
+    load()
+  }, [user])
+
+  const addTask = async (task) => {
+    try {
+      const created = await taskService.createTask({
+        title: task.title,
+        date: task.date,
+        importance: task.importance || 'low',
+      })
+      setTasks((prev) => [...prev, {
+        id: created._id,
+        title: created.title,
+        date: created.date,
+        done: created.status,
+        importance: created.importance,
+      }])
+    } catch (err) {
+      console.error('Erreur création tâche:', err)
+    }
   }
 
-  // Inverse l'état coché/décoché d'une tâche identifiée par son ID.
-  const toggleTask = (id) => {
-    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)))
+  const toggleTask = async (id) => {
+    const task = tasks.find((t) => t.id === id)
+    if (!task) return
+    try {
+      await taskService.updateTask(id, { status: !task.done })
+      setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)))
+    } catch (err) {
+      console.error('Erreur toggle tâche:', err)
+    }
   }
 
-  // Supprime une tâche de la liste par son ID.
-  const deleteTask = (id) => {
-    setTasks((prev) => prev.filter((t) => t.id !== id))
+  const deleteTask = async (id) => {
+    try {
+      await taskService.deleteTask(id)
+      setTasks((prev) => prev.filter((t) => t.id !== id))
+    } catch (err) {
+      console.error('Erreur suppression tâche:', err)
+    }
   }
 
   return (
@@ -28,5 +73,4 @@ export function TaskProvider({ children }) {
   )
 }
 
-// Hook personnalisé pour accéder au contexte des tâches (tasks, addTask, toggleTask, deleteTask).
 export const useTasks = () => useContext(TaskContext)

@@ -27,3 +27,6 @@ dist-ssr
 AGENTS.md
 UIDesign.md
 docs
+
+#Environment variables 
+.env

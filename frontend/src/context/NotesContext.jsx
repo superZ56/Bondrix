@@ -1,85 +1,165 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react'
+import * as noteService from '../services/noteService'
+import { useAuth } from './AuthContext'
 
 const NotesContext = createContext()
 
-const initialDirectories = [
-  {
-    id: '1',
-    name: 'Project Ideas',
-    type: 'directory',
-    children: [
-      { id: '1-1', name: 'Brainstorm', type: 'directory', children: [] },
-      { id: '1-2', name: 'My first note', type: 'note', content: '' },
-    ],
-  },
-  {
-    id: '2',
-    name: 'Meeting Notes',
-    type: 'directory',
-    children: [],
-  },
-]
+function buildTree(flatNotes, parentId = null) {
+  return flatNotes
+    .filter((n) => String(n.parentId) === String(parentId))
+    .map((n) => ({
+      id: n._id,
+      name: n.title,
+      type: n.type === 'folder' ? 'directory' : 'note',
+      content: n.content || '',
+      children: buildTree(flatNotes, n._id),
+    }))
+}
 
-let nextId = 10
-
-// Provider pour la gestion des notes et de l'arborescence de dossiers.
 export function NotesProvider({ children }) {
-  const [directories, setDirectories] = useState(initialDirectories)
+  const { user } = useAuth()
+  const [directories, setDirectories] = useState([])
   const [selectedItem, setSelectedItem] = useState(null)
+  const [flatNotes, setFlatNotes] = useState([])
+  const [loading, setLoading] = useState(true)
+  const dirtyRef = useRef({})
 
-  // Ajoute un sous-dossier dans le dossier parent spécifié (ou à la racine si null).
-  const addSubdirectory = (parentId) => {
+  useEffect(() => {
+    if (!user) {
+      setLoading(false)
+      return
+    }
+    const load = async () => {
+      try {
+        const notes = await noteService.getNotes()
+        setFlatNotes(notes)
+        setDirectories(buildTree(notes))
+      } catch (err) {
+        console.error('Erreur chargement notes:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+  }, [user])
+
+  const refreshTree = useCallback((newFlat) => {
+    setFlatNotes(newFlat)
+    setDirectories(buildTree(newFlat))
+  }, [])
+
+  const addSubdirectory = async (parentId) => {
     const name = prompt('Directory name:')
     if (!name) return
-    const newDir = { id: String(nextId++), name, type: 'directory', children: [] }
-    if (parentId === null) {
-      setDirectories([...directories, newDir])
-      return
-    }
-    const addRecursive = (items) =>
-      items.map((item) => {
-        if (item.id === parentId) return { ...item, children: [...(item.children || []), newDir] }
-        if (item.children) return { ...item, children: addRecursive(item.children) }
-        return item
+    try {
+      const created = await noteService.createNote({
+        type: 'folder',
+        title: name,
+        content: null,
+        parentId: parentId || null,
       })
-    setDirectories(addRecursive(directories))
+      refreshTree([...flatNotes, created])
+    } catch (err) {
+      console.error('Erreur création dossier:', err)
+    }
   }
 
-  // Ajoute une note dans le dossier parent spécifié (ou à la racine si null).
-  const addNote = (parentId) => {
+  const addNote = async (parentId) => {
     const name = prompt('Note name:')
     if (!name) return
-    const newNote = { id: String(nextId++), name, type: 'note', content: '' }
-    if (parentId === null) {
-      setDirectories([...directories, newNote])
-      return
-    }
-    const addRecursive = (items) =>
-      items.map((item) => {
-        if (item.id === parentId) return { ...item, children: [...(item.children || []), newNote] }
-        if (item.children) return { ...item, children: addRecursive(item.children) }
-        return item
+    try {
+      const created = await noteService.createNote({
+        type: 'note',
+        title: name,
+        content: '',
+        parentId: parentId || null,
       })
-    setDirectories(addRecursive(directories))
+      refreshTree([...flatNotes, created])
+    } catch (err) {
+      console.error('Erreur création note:', err)
+    }
   }
 
-  // Met à jour le contenu ou les propriétés d'une note existante dans l'arborescence.
-  const updateNote = (updatedNote) => {
-    const updateRecursive = (items) =>
-      items.map((item) => {
-        if (item.id === updatedNote.id) return updatedNote
-        if (item.children) return { ...item, children: updateRecursive(item.children) }
-        return item
+  const updateNote = useCallback((updatedNote) => {
+    dirtyRef.current[updatedNote.id] = updatedNote
+  }, [])
+
+  const flushDirty = useCallback(async () => {
+    const ids = Object.keys(dirtyRef.current)
+    if (ids.length === 0) return
+    const promises = ids.map((id) => {
+      const note = dirtyRef.current[id]
+      return noteService.updateNote(id, { title: note.name, content: note.content })
+    })
+    try {
+      await Promise.all(promises)
+      const newFlat = flatNotes.map((n) => {
+        const dirty = dirtyRef.current[n._id]
+        if (dirty) return { ...n, title: dirty.name, content: dirty.content }
+        return n
       })
-    setDirectories(updateRecursive(directories))
+      setFlatNotes(newFlat)
+      dirtyRef.current = {}
+    } catch (err) {
+      console.error('Erreur sauvegarde notes:', err)
+    }
+  }, [flatNotes])
+
+  const saveAndFlush = useCallback(async () => {
+    const ids = Object.keys(dirtyRef.current)
+    if (ids.length === 0) return
+    const toSave = Object.values(dirtyRef.current)
+    dirtyRef.current = {}
+    try {
+      await Promise.all(
+        toSave.map((note) =>
+          noteService.updateNote(note.id, { title: note.name, content: note.content })
+        )
+      )
+    } catch (err) {
+      console.error('Erreur sauvegarde notes:', err)
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      const ids = Object.keys(dirtyRef.current)
+      if (ids.length === 0) return
+      const toSave = Object.values(dirtyRef.current)
+      for (const note of toSave) {
+        fetch(`http://localhost:3000/api/notes/${note.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          keepalive: true,
+          body: JSON.stringify({ title: note.name, content: note.content }),
+        })
+      }
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [])
+
+  const deleteItem = async (id) => {
+    try {
+      await noteService.deleteNote(id)
+      const newFlat = flatNotes.filter((n) => n._id !== id && String(n.parentId) !== id)
+      refreshTree(newFlat)
+      if (selectedItem?.id === id) setSelectedItem(null)
+    } catch (err) {
+      console.error('Erreur suppression:', err)
+    }
   }
 
   return (
-    <NotesContext.Provider value={{ directories, selectedItem, setSelectedItem, addSubdirectory, addNote, updateNote }}>
+    <NotesContext.Provider value={{
+      directories, selectedItem, setSelectedItem, loading,
+      addSubdirectory, addNote, updateNote, deleteItem,
+      flushDirty, saveAndFlush,
+    }}>
       {children}
     </NotesContext.Provider>
   )
 }
 
-// Hook personnalisé pour accéder au contexte des notes (directories, selectedItem, opérations CRUD).
 export const useNotes = () => useContext(NotesContext)
