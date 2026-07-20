@@ -20,6 +20,7 @@
     "@tiptap/extension-color": "^3.27.3",
     "@tiptap/extension-font-family": "^3.27.3",
     "@tiptap/extension-highlight": "^3.27.3",
+    "@tiptap/extension-image": "^3.27.3",
     "@tiptap/extension-placeholder": "^3.27.3",
     "@tiptap/extension-table": "^3.27.3",
     "@tiptap/extension-table-cell": "^3.27.3",

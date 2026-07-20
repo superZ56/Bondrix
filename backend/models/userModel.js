@@ -27,7 +27,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
+    avatar: {
+      type: String,
+      default: null,
+    },
   },
+
+
   {
     // Ajoute automatiquement createdAt et updatedAt
     timestamps: true,

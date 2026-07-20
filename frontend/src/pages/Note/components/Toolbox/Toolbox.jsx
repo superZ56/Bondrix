@@ -14,6 +14,7 @@ import ListButtons from './ListButtons'
 import BlockButtons from './BlockButtons'
 import UndoRedoButtons from './UndoRedoButtons'
 import InsertMenu from '../Insertion/InsertMenu'
+import AIMenu from '../AI/AIMenu.jsx'
 
 // Trait vertical de séparation entre les groupes d'outils.
 function Separator() {
@@ -46,6 +47,8 @@ export default function Toolbox({ editor }) {
       <ListButtons editor={editor} />
       <Separator />
       <BlockButtons editor={editor} />
+      <Separator />
+      <AIMenu editor={editor} />
     </div>
   )
 }

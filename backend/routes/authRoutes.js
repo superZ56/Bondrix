@@ -1,6 +1,7 @@
 import express from "express";
-import { register, login, googleLogin, getMe, logout } from "../controllers/authController.js";
+import { register, login, googleLogin, getMe, logout, deleteAccount } from "../controllers/authController.js";
 import { protect } from "../middleware/authMiddleware.js";
+import { updateProfile } from "../controllers/authController.js";
 
 const router = express.Router();
 
@@ -18,6 +19,13 @@ router.get("/me", protect, getMe);
 
 //logout 
 router.post("/logout", protect, logout);
+
+// mise a jour de profile ( Avatar )
+router.put("/profile" , protect , updateProfile)
+
+//Suprimer un Compte 
+router.delete("/account" , protect , deleteAccount)
+
 
 
 export default router;

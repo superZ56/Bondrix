@@ -1,7 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import SideBar from './SideBar'
-import TopBar from './TopBar'
-import Settings from '../pages/Settings'
+import Settings from '../pages/Settings/Settings'
 import { useTheme } from '../context/ThemeContext'
 import { useState } from 'react'
 
@@ -12,11 +11,13 @@ function Layout() {
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <SideBar />
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <TopBar onSettingsClick={() => setShowSettings(true)} />
+      <SideBar onSettingsClick={() => setShowSettings(true)} />
+      <div
+        className="flex-1 flex flex-col overflow-hidden"
+        style={{ backgroundColor: colors.secondary }}
+      >
         <main
-          className="flex-1 overflow-y-auto p-6"
+          className="flex-1 overflow-y-auto overflow-x-hidden m-4 mb-0 rounded-t-2xl hide-scrollbar"
           style={{ backgroundColor: colors.third }}
         >
           <Outlet />

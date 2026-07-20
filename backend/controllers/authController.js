@@ -142,4 +142,37 @@ const logout = async (req, res) => {
   res.json({ message: "Déconnecté" });
 };
 
-export { register, login, googleLogin, getMe, logout };
+// mise a jour du profile ( AvatarIcon )
+
+const updateProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user) return res.status(404).json({ message: "Utilisateur non trouvé" });
+
+    if (req.body.avatar !== undefined) {
+      user.avatar = req.body.avatar;
+    }
+
+    await user.save();
+    res.json({ _id: user._id, username: user.username, email: user.email, workspaceId: user.workspaceId, avatar: user.avatar });
+  } catch (error) {
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+
+
+// Suprimer un compte 
+
+const deleteAccount = async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.user._id);
+    res.clearCookie("token");
+    res.json({ message: "Compte supprimé" });
+  } catch (error) {
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+};
+
+
+
+export { register, login, googleLogin, getMe, logout , updateProfile , deleteAccount };

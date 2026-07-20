@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
 import { useNotes } from '../context/NotesContext'
 import DirectoryTree from './DirectoryTree'
+import UserCard from './UserCard'
 import {
   Home,
   FileText,
@@ -24,7 +25,7 @@ const navItems = [
 ]
 
 // Barre latérale de navigation avec les liens vers les pages et l'arborescence des notes.
-function SideBar() {
+function SideBar({ onSettingsClick }) {
   const location = useLocation()
   const { colors } = useTheme()
   const { directories, selectedItem, setSelectedItem, addSubdirectory, addNote } = useNotes()
@@ -145,6 +146,8 @@ function SideBar() {
           )
         })}
       </nav>
+
+      <UserCard onSettingsClick={onSettingsClick} />
     </aside>
   )
 }

@@ -2,6 +2,26 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+html, body, #root {
+  overflow: hidden;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* Hide scrollbar*/
+.hide-scrollbar {
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* IE/Edge */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;                /* Chrome/Safari */
+}
+
+
+
+
 .ProseMirror {
   outline: none;
   min-height: 400px;
@@ -153,4 +173,11 @@
 
 .ProseMirror .resize-cursor {
   cursor: col-resize;
+}
+
+.tiptap img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1rem 0;
 }

@@ -17,13 +17,13 @@ export const SettingsIcon = ({ onClick }) => {
 }
 
 // Bouton circulaire affichant l'avatar utilisateur ou un placeholder.
-export const AvatarIcon = ({ src, alt, onClick }) => {
+export const AvatarIcon = ({ src, alt, onClick, size = "w-9 h-9" }) => {
   const { colors } = useTheme()
 
   return (
     <button
       onClick={onClick}
-      className="w-9 h-9 rounded-full overflow-hidden flex items-center justify-center cursor-pointer transition-all hover:scale-110"
+      className={`${size} rounded-full overflow-hidden flex items-center justify-center cursor-pointer transition-all hover:scale-110`}
       style={{
         backgroundColor: colors.third,
         border: `2px solid ${colors.primary}`,
@@ -46,9 +46,9 @@ export const CircleText = ({ text, onClick }) => {
     <button
       onClick={onClick}
       className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer transition-all hover:scale-110"
-      style={{ backgroundColor: colors.primary }}
+      style={{ backgroundColor: colors.third }}
     >
-      <span className="text-sm font-semibold text-white">{text}</span>
+      <span className="text-sm font-semibold text-black">{text}</span>
     </button>
   )
 }
